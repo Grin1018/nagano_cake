@@ -1,5 +1,4 @@
-<h2>Sign up</h2>
-
+<%= render "public/shared/links" %>
 <%= render "public/shared/error_messages", resource: resource %>
 <div class=“row login-row”>
   <h2>新規会員登録</h2>
@@ -68,4 +67,3 @@
   <p id="notice"><%= notice %></p>
 
 </div>
-

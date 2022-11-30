@@ -23,22 +23,83 @@
     <ul class="navbar-nav ml-auto">
 
      <% if customer_signed_in? %>
-     <li class="nav-item">
-       <%= link_to "マイページ", customer_path(current_customer.id), class: "btn btn-secondary" %>
+     <nav class= "nav navbar-brand navbar-left header-logo" >
+    <%= link_to 'LOGO', root_path, class: "btn btn-secondary" %>
+    </nav>
+     <nav class= "nav navbar-nav" >
+  <span class= "customer-name  login-customer-name" >
+    ようこそ、<%= current_customer.first_name %><%= current_customer.last_name %>さん！
+  </span>
+    </nav>
+
+   <nav>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item">
+      <%= link_to customer_path(current_customer.id), class: "btn btn-secondary" do %>
+      <i class="glyphicon glyphicon-user users"></i>マイページ
+      <% end %>
       </li>
-       <li class="nav-item">
-       <%= link_to "商品一覧", items_path, class: "btn btn-secondary" %>
-       </li>
-       <li class="nav-item">
-       <%= link_to "カート", cart_items_path, class: "btn btn-secondary" %>
-       </li>
-       <li class="nav-item">
-       <%= link_to "ログアウト", destroy_customer_session_path, class: "btn btn-secondary" %>
-       </li>
+      <li class="nav-item">
+      <%= link_to admin_items_path, class: "btn btn-secondary" do %>
+      <i class="glyphicon glyphicon-user users"></i>商品一覧
+      <% end %>
+      </li>
+      <li class="nav-item">
+      <%= link_to cart_items_path, class: "btn btn-secondary" do %>
+      <i class="glyphicon glyphicon-user users"></i>カート
+      <% end %>
+      </li>
+      <li class="nav-item">
+      <%= link_to destroy_customer_session_path, method: :delete, class: "btn btn-secondary" do %>
+      <i class="glyphicon glyphicon-user users"></i>ログアウト
+      <% end %>
+      </li>
+     </ul>
+    </nav>
+
 
      <% elsif admin_signed_in? %>
-     admin_signed_in
-
+     <div class= "admin-header">
+     <div class= "admin-nav-bars">
+      <nav class="nav navbar-brand navbar-left header-logo">
+      <%= link_to admins_root_path,class:"header-logo-letter" do %>
+      <%= link_to 'LOGO', admin_root_path, class: "btn bstn-secondary" %>
+      <% end %>
+      </nav>
+     <nav class="nav navbar-nav">
+      <span class="adjust"></span>
+    </nav>
+    <nav>
+      <ul class="nav navbar-nav navbar-right">
+      <li class="nav-item">
+      <%= link_to admin_items_path, class: "btn btn-secondary" do %>
+      <i class="glyphicon glyphicon-user users"></i>商品一覧
+     <% end %>
+      </li>
+      <li class="nav-item">
+      <%= link_to admin_customers_path, class: "btn btn-secondary" do %>
+       <i class="glyphicon glyphicon-user users"></i>会員一覧
+      <% end %>
+      </li>
+      <li class="nav-item">
+      <%= link_to admin_root_path, class: "btn btn-secondary" do %>
+      <i class="glyphicon glyphicon-user users"></i>注文履歴一覧
+      <% end %>
+      </li>
+      <li class="nav-item">
+      <%= link_to admin_genres_path, class: "btn btn-secondary" do %>
+      <i class="glyphicon glyphicon-user users"></i>ジャンル一覧
+      <% end %>
+      </li>
+      <li class="nav-item">
+      <%= link_to destroy_admin_session_path, method: :delete, class: "btn btn-secondary" do %>
+      <i class="glyphicon glyphicon-user users"></i>ログアウト
+      <% end %>
+      </li>
+      </ul>
+    </nav>
+  </div>
+  </div>
 
      <% else %>
       <li class="nav-item">
