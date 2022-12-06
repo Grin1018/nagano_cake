@@ -1,4 +1,4 @@
-class HomesController < ApplicationController
-  def top
-  end
-end
+class Admin::HomesController < ApplicationController
+
+  before_action :authenticate_admin!
+end   
