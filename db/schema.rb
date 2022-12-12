@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_01_131733) do
+ActiveRecord::Schema.define(version: 2022_12_12_070834) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -51,8 +51,8 @@ ActiveRecord::Schema.define(version: 2022_12_01_131733) do
   end
 
   create_table "admins", force: :cascade do |t|
-    t.string "email"
-    t.string "encrypted_password"
+    t.string "email", null: false
+    t.string "encrypted_password", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "reset_password_token"
@@ -63,13 +63,11 @@ ActiveRecord::Schema.define(version: 2022_12_01_131733) do
   end
 
   create_table "cart_items", force: :cascade do |t|
-    t.integer "item_id_id"
-    t.integer "customer_id_id"
-    t.integer "amount", null: false
+    t.integer "item_id"
+    t.integer "customer_id"
+    t.integer "amount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["customer_id_id"], name: "index_cart_items_on_customer_id_id"
-    t.index ["item_id_id"], name: "index_cart_items_on_item_id_id"
   end
 
   create_table "customers", force: :cascade do |t|
@@ -137,8 +135,6 @@ ActiveRecord::Schema.define(version: 2022_12_01_131733) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "customers", column: "customers_id"
-  add_foreign_key "cart_items", "customer_ids"
-  add_foreign_key "cart_items", "item_ids"
   add_foreign_key "order_details", "item_ids"
   add_foreign_key "order_details", "order_ids"
   add_foreign_key "orders", "customer_ids"

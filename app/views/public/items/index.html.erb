@@ -1,11 +1,10 @@
  <div class="col-xs-9">
-        <h2><%= "#{@item}一覧 （全#{@items_all.count}件）" %></h2>
         <% @items.each do |item| %>
             <div class="item-box">
                 <table class="table">
                     <tr>
                         <th><%= link_to item_path(item) do %>
-                           ###### ##<%= attachment_image_tag(product, :image,size: "180x130", fallback: "no_image.jpg") %>
+                           	 <%= image_tag item.get_image(180,130) %>
                             <% end %>
                         </th>
                     </tr>

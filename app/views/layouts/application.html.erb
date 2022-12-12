@@ -23,9 +23,6 @@
     <ul class="navbar-nav ml-auto">
 
      <% if customer_signed_in? %>
-     <nav class= "nav navbar-brand navbar-left header-logo" >
-    <%= link_to 'LOGO', root_path, class: "btn btn-secondary" %>
-    </nav>
      <nav class= "nav navbar-nav" >
   <span class= "customer-name  login-customer-name" >
     ようこそ、<%= current_customer.first_name %><%= current_customer.last_name %>さん！
@@ -57,15 +54,9 @@
      </ul>
     </nav>
 
-
      <% elsif admin_signed_in? %>
      <div class= "admin-header">
      <div class= "admin-nav-bars">
-      <nav class="nav navbar-brand navbar-left header-logo">
-      <%= link_to admin_root_path,class:"header-logo-letter" do %>
-      <%= link_to 'LOGO', admin_root_path, class: "btn bstn-secondary" %>
-      <% end %>
-      </nav>
      <nav class="nav navbar-nav">
       <span class="adjust"></span>
     </nav>
