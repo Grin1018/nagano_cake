@@ -107,19 +107,19 @@ ActiveRecord::Schema.define(version: 2022_12_12_070834) do
   end
 
   create_table "order_details", force: :cascade do |t|
-    t.integer "order_id_id"
-    t.integer "item_id_id"
+    t.integer "order_id"
+    t.integer "item_id"
     t.integer "price", null: false
     t.integer "amount", null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["item_id_id"], name: "index_order_details_on_item_id_id"
-    t.index ["order_id_id"], name: "index_order_details_on_order_id_id"
+    t.index ["item_id"], name: "index_order_details_on_item_id"
+    t.index ["order_id"], name: "index_order_details_on_order_id"
   end
 
   create_table "orders", force: :cascade do |t|
-    t.integer "customer_id_id"
+    t.integer "customer_id"
     t.string "postal_code", null: false
     t.string "address", null: false
     t.string "name", null: false
@@ -129,13 +129,13 @@ ActiveRecord::Schema.define(version: 2022_12_12_070834) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["customer_id_id"], name: "index_orders_on_customer_id_id"
+    t.index ["customer_id"], name: "index_orders_on_customer_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "addresses", "customers", column: "customers_id"
-  add_foreign_key "order_details", "item_ids"
-  add_foreign_key "order_details", "order_ids"
-  add_foreign_key "orders", "customer_ids"
+  add_foreign_key "order_details", "items"
+  add_foreign_key "order_details", "orders"
+  add_foreign_key "orders", "customers"
 end

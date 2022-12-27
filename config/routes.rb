@@ -20,8 +20,8 @@ devise_for :admin, skip: [:registrations, :passwords] ,controllers: {
     resources :cart_items, only: [:create, :index, :update, :destroy]
     delete 'cart_items' => 'cart_items#destroy_all'
     resources :orders, only: [:new, :create, :show, :index]
-    post 'public/orders' => 'orders#infor#check'
-    get 'public/orders' => 'orders#completed'
+    post 'public/orders' => 'orders#infor', as:'infor'
+    get 'public/orders' => 'orders#completed', as:'completed'
     resources :addresses, only: [:create, :edit, :update, :index, :destroy]
 
   end

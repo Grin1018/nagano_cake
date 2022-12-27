@@ -1,0 +1,53 @@
+<h2>注文情報確認</h2>
+      <thead>
+              <th scope="col">商品名</th>
+              <th scope="col">単価（税込）</th>
+              <th scope="col">数量</th>
+              <th scope="col">小計</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @cart_items.each do |cart_item| %>
+              <tr>
+                <td><%= cart_item.item.name %></td>
+                <td><%= (cart_item.item.price * 1.1).to_i%></td>
+                <td><%= cart_item.amount %></td>
+                <td><%= (Item.find(cart_item.item_id).price * 1.1 * cart_item.amount).to_i  %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+          
+          <tbody>
+            <tr>
+              <th scope="row">支払い方法</th>
+              <td><%= @order.payment %></td>
+            </tr>
+            <tr>
+              <th scope="row">お届け先</th>
+              <td>
+                <p><%= @order.postal_code %>&emsp;<%= @order.address %></p>
+                <p><%= @order.name %></p>
+              </td>
+            </tr>
+          </tbody>
+
+          <tbody>
+            <tr>
+              <td class="active">送料</td>
+              <td><%= @order.shipping_cost %></td>
+            </tr>
+            <tr>
+              <td class="active">商品合計</td>
+              <td><%= @sum %></td>
+            </tr>
+            <tr>
+              <td class="active">請求金額</td>
+              <td><%= @sum + @order.shipping_cost %></td>
+            </tr>
+          </tbody>
+   
+        <%= form_with(model: @order, url:completed_path, method: :get, local: true) do |f| %>
+        
+              <%= f.submit "注文を確定する",class:"btn btn-primary col-xs-12" %>
+        <% end %>

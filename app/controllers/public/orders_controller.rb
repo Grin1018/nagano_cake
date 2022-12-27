@@ -1,91 +1,68 @@
 class Public::OrdersController < ApplicationController
   before_action :authenticate_customer!
-  def index
-    @orders = Order.where(customer_id:current_customer)
-  end
+
+ def index
+    @orders = current_customer.orders.all
+ end
 
   def show
     @order = Order.find(params[:id])
     @order_details = @order.order_details
   end
 
-  def new
+  def new #注文情報入力
     @addresses = current_customer.addresses
     @address = Address.new
     @order = Order.new
   end
 
-  #情報入力画面でボタンを押して情報をsessionに保存
-  def create
-    session[:payment] = params[:payment]
-    if params[:select] == "select_address"
-      session[:address] = params[:address]
-    elsif params[:select] == "my_address"
-      session[:address] ="〒" +current_customer.postal_code+current_customer.address+current_customer.last_name+current_customer.first_name
-    end
-    if session[:address].present? && session[:payment].present?
-      redirect_to orders_confirm_path
+  def create　#データベースへ情報送信
+    session[:total_payment] = params[:total_payment]
+    if session[:address].present? && session[:total_payment].present?
+      redirect_to infor_path
     else
       flash[:order_new] = "支払い方法と配送先を選択して下さい"
       redirect_to new_order_path
     end
   end
-  # 購入確認画面
-  def confirm
-      @orders = current_customer.orders
-      @total_price = calculate(current_customer)
 
-      if  session[:address].length <8
-        @address = Address.find(session[:address])
-      end
+  def check #注文情報入力された情報の確認
+      @cart_items = current_customer.cart_items.all
+      @order = Order.new(
+      payment: session[:total_payment].to_i,
+      name: session[:name],
+      postal_code: session[:postal_code],
+      address: session[:address],
+      shipping_cost: 800
+    )
+    @sum = 0
+    @subtotals = @cart_items.map { |cart_item| (Item.find(cart_item.item_id).price * 1.1 * cart_item.amount).to_i }
+    @sum = @subtotals.sum
+    session[:sum] = @sum
   end
 
-  # 情報入力画面にて新規配送先の登録
-  def create_address
-    @address = Address.new(address_params)
-    @address.customer_id = current_customer.id
-    @address.save
-    redirect_to new_order_path
-  end
+def completed #サンクスページ　
+		order = Order.new(session[:order])
+		order.save
 
-
-  def create_order
-    # オーダーの保存
-    @order = Order.new
-    @order.customer_id = current_customer.id
-    @order.address = session[:address]
-    @order.payment = session[:payment]
-    @order.total_price = calculate(current_customer)
-    @order.order_status = 0
-    @order.save
-    # saveができた段階でOrderモデルにorder_idが入る
-
-    # オーダー商品ごとの詳細の保存
-    current_customer.cart_items.each do |cart|
-      @order_detail = OrderDetail.new
-      @order_detail.order_id = @order.id
-      @order_detail.item_name = cart.item.name
-      @order_detail.item_price = cart.item.price
-      @order_detail.amount = cart.amount
-      @order_detail.item_status = 0
-      @order_detail.save
-
-    end
-    current_customer.cart_items.destroy_all
-    session.delete(:address)
-    session.delete(:payment)
-    redirect_to thanks_path
-  end
+		if session[:new_address]
+			address = current_customer.addresses.new
+		  address.postal_code = order.postal_code
+			address.address = order.address
+			address.name = order.name
+			address.save
+			session[:new_address] = nil
+		end
+end
 
   private
    def address_params
-     params.require(:address).permit(:customer_id,:last_name, :first_name, :postal_code, :address)
+     params.require(:address).permit(:customer_id,:name, :postal_code, :address)
    end
    def order_params
-     params.require(:order).permit(:customer_id, :address, :payment, :carriage, :total_price, :order_status)
+     params.require(:order).permit(:customer_id, :address, :payment_method, :total_payment)
    end
 
-   # 商品合計（税込）の計算
    def calculate(user)
      total_price = 0
      user.cart_items.each do |cart_item|
